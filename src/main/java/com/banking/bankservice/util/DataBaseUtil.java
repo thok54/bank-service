@@ -11,7 +11,7 @@ public class DataBaseUtil {
         DataBaseUtil util = new DataBaseUtil();
 
         Connection con = util.startConnection();
-        util.executeQuery(con, " imposible query");
+        util.executeQuery(con, " impossible query");
         try {
             showTables(con);
         } catch (SQLException e) {
