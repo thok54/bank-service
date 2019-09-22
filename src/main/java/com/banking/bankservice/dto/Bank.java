@@ -1,15 +1,10 @@
 package com.banking.bankservice.dto;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-@Entity
-@Table(name = "BANKS")
 public class Bank {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private String address;
