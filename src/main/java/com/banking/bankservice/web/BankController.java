@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/bank")
 public class BankController {
+
     @Autowired
     BankService bankService;
-
 
     @GetMapping
     public List<Bank> getAll() {
