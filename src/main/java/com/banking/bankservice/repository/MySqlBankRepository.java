@@ -3,6 +3,8 @@ package com.banking.bankservice.repository;
 import com.banking.bankservice.dto.Bank;
 import com.banking.bankservice.util.DataBaseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Connection;
@@ -18,26 +20,20 @@ public class MySqlBankRepository implements BankRepository {
     @Autowired
     private DataBaseUtil dataBaseUtil;
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
     @Override
     public List<Bank> findAll() {
-        List<Bank> banks = new ArrayList();
-        Connection con = dataBaseUtil.startConnection();
-        try {
-            PreparedStatement pstmt = con.prepareStatement("select * from BANKS");
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Integer id = rs.getInt("id");
+        return jdbcTemplate.query("select * from BANKS", new RowMapper<Bank>() {
+            @Override
+            public Bank mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("id");
                 String name = rs.getString("name");
                 String address = rs.getString("address");
-                Bank bank = new Bank(id, name, address);
-                banks.add(bank);
+                return new Bank(id, name, address);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
-        }
-        return banks;
+        });
     }
 
     @Override

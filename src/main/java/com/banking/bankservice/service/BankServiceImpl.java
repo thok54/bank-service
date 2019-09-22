@@ -14,7 +14,7 @@ public class BankServiceImpl implements BankService {
     private BankRepository repository;
 
     @Override
-    public List<Bank> process() throws IndexOutOfBoundsException {
+    public List<Bank> findAll() throws IndexOutOfBoundsException {
         return repository.findAll();
     }
 

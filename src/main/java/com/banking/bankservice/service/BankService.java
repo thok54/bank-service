@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public interface BankService {
-    List<Bank> process();
+    List<Bank> findAll();
 
     Bank find(int n);
 

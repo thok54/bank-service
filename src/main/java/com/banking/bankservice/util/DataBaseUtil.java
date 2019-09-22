@@ -24,7 +24,7 @@ public class DataBaseUtil {
         Connection con = null;
         try {
             con = DriverManager
-                    .getConnection("jdbc:mysql://localhost:3306/bank_project", "user", "user");
+                    .getConnection("jdbc:mysql://localhost:3306/bank_project?serverTimezone=UTC", "user", "user");
         } catch (SQLException e) {
             e.printStackTrace();
         }

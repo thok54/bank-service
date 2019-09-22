@@ -17,7 +17,7 @@ public class BankController {
 
     @GetMapping
     public List<Bank> getAll() {
-        return bankService.process();
+        return bankService.findAll();
     }
 
     @GetMapping("/{id}")
