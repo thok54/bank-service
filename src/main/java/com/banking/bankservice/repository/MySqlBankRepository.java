@@ -1,24 +1,18 @@
 package com.banking.bankservice.repository;
 
 import com.banking.bankservice.dto.Bank;
-import com.banking.bankservice.util.DataBaseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository
 public class MySqlBankRepository implements BankRepository {
-
-    @Autowired
-    private DataBaseUtil dataBaseUtil;//TODO: Replace DatabaseUtil(delete when finished) for Jdbc. BankAccount Controller.
+    //TODO:BankAccount Controller.
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -38,95 +32,58 @@ public class MySqlBankRepository implements BankRepository {
 
     @Override
     public Bank find(int id) {
-        Connection con = dataBaseUtil.startConnection();
         try {
-            PreparedStatement pstmt = con.prepareStatement(String.format("select * from BANKS where id = %d", id));
-            ResultSet rs = pstmt.executeQuery();
-            if (rs.next()) {
-                String name = rs.getString("name");
-                String address = rs.getString("address");
-                return new Bank(id, name, address);
-            }
-            throw new EntityNotFoundException(String.format("Bank with ID = %d does not exist", id));
+            return jdbcTemplate.queryForObject(String.format(
+                    "select * from BANKS where id = %d", id), new RowMapper<Bank>() {
+                @Override
+                public Bank mapRow(ResultSet rs, int i) throws SQLException {
+                    String name = rs.getString("name");
+                    String address = rs.getString("address");
+                    return new Bank(id, name, address);
+                }
+            });
         } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
+            throw new EntityNotFoundException(String.format(
+                    "Bank with ID = %d does not exist", id));
         }
-        return null;
     }
 
     @Override
     public List<Bank> findAllByName(String name) {
-        List<Bank> banks = new ArrayList();
-        Connection con = dataBaseUtil.startConnection();
         try {
-            PreparedStatement pstmt = con.prepareStatement(String.format("select * from BANKS where name = %s", name));
-            ResultSet rs = pstmt.executeQuery();
-            while (rs.next()) {
-                Integer id = rs.getInt("id");
+        return jdbcTemplate.query(String.format(
+                "select * from BANKS where name = %s", name), new RowMapper<Bank>() {
+            @Override
+            public Bank mapRow(ResultSet rs, int rowNum) throws SQLException {
+                int id = rs.getInt("id");
                 String address = rs.getString("address");
-                Bank bank = new Bank(id, name, address);
-                banks.add(bank);
+                return new Bank(id, name, address);
             }
-            if (banks.isEmpty()) {
-                throw new EntityNotFoundException(String.format("Bank with name = %s does not exist", name));
-            }
-            return banks;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
-        }
-        return banks;
+        });
+        }catch (Exception e){
+            throw new EntityNotFoundException(String.format("Bank with name = %s does not exist", name));
+         }
     }
 
 
     @Override
     public void store(Bank bank) {
-        Connection con = dataBaseUtil.startConnection();
-        try {
-            String name = bank.getName();
-            String address = bank.getAddress();
-
-            String query = String.format("INSERT INTO BANKS (name, address) VALUES (\"%s\",\"%s\")", name, address);
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
-        }
+        String name = bank.getName();
+        String address = bank.getAddress();
+        jdbcTemplate.update(String.format(
+                "INSERT INTO BANKS (name, address) VALUES (\"%s\",\"%s\")", name, address));
     }
 
     @Override
     public void update(int id, Bank bank) {
-        Connection con = dataBaseUtil.startConnection();
-        try {
-            String name = bank.getName();
-            String address = bank.getAddress();
-            String query = String.format("UPDATE BANKS SET name = \"%s\", address = \"%s\" WHERE id = %d", name, address, id);
-            PreparedStatement pstmt = con.prepareStatement(query);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
-        }
+        String name = bank.getName();
+        String address = bank.getAddress();
+        jdbcTemplate.update(String.format(
+                "UPDATE BANKS SET name = \"%s\", address = \"%s\" WHERE id = %d", name, address, id));
     }
 
     @Override
-    public void delete(int id) {
-        Connection con = dataBaseUtil.startConnection();
-        try {
-            PreparedStatement pstmt = con.prepareStatement("DELETE FROM BANKS WHERE id = " + id);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            dataBaseUtil.closeConections(con);
-        }
-
+    public void delete(int id) {//Does not delete primary key, so deleted id become unusable
+        jdbcTemplate.update(String.format("DELETE FROM BANKS WHERE id = " + id));
     }
 }
