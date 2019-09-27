@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/bank/account")
 public class BankAccountController {
@@ -17,30 +19,44 @@ public class BankAccountController {
     private RestTemplate restTemplate;
 
     @GetMapping
-    public Account get() {
+    public Account getAll() {
         ResponseEntity<Account> response = restTemplate.getForEntity("http://localhost:8085/account", Account.class);
         return response.getBody();
     }
 
-    @PostMapping
-    public void post() {
-        HttpEntity<Account> request = new HttpEntity<>(new Account());
-        restTemplate.postForEntity("http://localhost:8085/account", request, Account.class);
-    }
-
-    @PutMapping
-    public void put() {/*
-        Account updatedInstance = new Account();
-        updatedInstance.setId(createResponse.getBody().getId());
-        String resourceUrl = "http://localhost:8085/account";
-        HttpEntity<Account> requestUpdate = new HttpEntity<>(updatedInstance, headers);
-        template.exchange(resourceUrl, HttpMethod.PUT, requestUpdate, Void.class);
+    @GetMapping("/{id}")
+    public Account getById(@PathVariable Integer id) {
+        ResponseEntity<Account> response = restTemplate.getForEntity("http://localhost:8085/account/" + id, Account.class);
         return response.getBody();
-    */
     }
 
-    @DeleteMapping
-    public void delete() {
-        restTemplate.delete("http://localhost:8085/account");
+    @GetMapping("/byName/{name}")
+    public Account getByName(@PathVariable String name) {
+        ResponseEntity<Account> response = restTemplate.getForEntity("http://localhost:8085/account/byName/" + name, Account.class);
+        return response.getBody();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void post(@RequestBody Account acc) {
+        restTemplate.postForEntity("http://localhost:8085/account", acc, Account.class);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void put(@PathVariable Integer id, @RequestBody Account acc) {
+        restTemplate.put("http://localhost:8085/account/" + id, acc);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Integer id) {
+        restTemplate.delete("http://localhost:8085/account/" + id);
+    }
+
+    @PutMapping("/reset")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void reset(@RequestBody Account acc) {
+        restTemplate.put("http://localhost:8085/account/reset", acc);
     }
 }
