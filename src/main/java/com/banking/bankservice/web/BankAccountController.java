@@ -24,9 +24,7 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/bank/account")
 public class BankAccountController {
 
-    //TODO: BankAccountService, BankService and AccountService tests.
-
-    private String basePath = "/account";
+    //TODO: BankAccountService(fix) and BankService tests.
 
     @Autowired
     BankAccountService bankAccountService;
