@@ -24,10 +24,10 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/bank/account")
 public class BankAccountController {
 
-    //TODO: BankAccountService(fix) and BankService tests.
+    //TODO: BankAccountService(fix) tests.
 
     @Autowired
-    BankAccountService bankAccountService;
+    private BankAccountService bankAccountService;
 
     @GetMapping
     public List<Account> getAll() {
