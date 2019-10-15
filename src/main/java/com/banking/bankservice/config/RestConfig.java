@@ -1,5 +1,6 @@
 package com.banking.bankservice.config;
 
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -8,7 +9,9 @@ import org.springframework.web.client.RestTemplate;
 public class RestConfig {
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
+    public RestTemplate accountRestTemplate() {
+        return new RestTemplateBuilder()
+                .rootUri("http://localhost:8085")
+                .build();
     }
 }
