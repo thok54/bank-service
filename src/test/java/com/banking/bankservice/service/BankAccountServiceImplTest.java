@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class BankAccountServiceImplTest {
 
-    //TODO: Complete tests.
+    //TODO: Complete tests, expressions, exercises.
 
     @Test
     public void findAll() {

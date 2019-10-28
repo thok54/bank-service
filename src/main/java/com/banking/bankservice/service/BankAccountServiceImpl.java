@@ -26,7 +26,7 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public ResponseEntity<Account[]> findAllByName(String name) {
-        return accountRestTemplate.getForEntity(basePath + "/byName/" + "\"" + name + "\"", Account[].class);
+        return accountRestTemplate.getForEntity(basePath + "/byName/" + name, Account[].class);
     }
 
     @Override

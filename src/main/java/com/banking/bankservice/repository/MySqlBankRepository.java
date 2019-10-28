@@ -35,8 +35,8 @@ public class MySqlBankRepository implements BankRepository {
     @Override
     public List<Bank> findAllByName(String name) {
         try {
-            return jdbcTemplate.query(String.format(
-                    "select * from BANKS where name = %s", name), bankRowMapper);
+            return jdbcTemplate.query(
+                    "select * from BANKS where name like '%@name%'".replaceAll("@name", name), bankRowMapper);
         } catch (Exception e) {
             throw new EntityNotFoundException(
                     String.format("Bank with name = %s does not exist", name));
