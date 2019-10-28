@@ -24,8 +24,6 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 @RequestMapping("/bank/account")
 public class BankAccountController {
 
-    //TODO: BankAccountService(fix) tests.
-
     @Autowired
     private BankAccountService bankAccountService;
 
