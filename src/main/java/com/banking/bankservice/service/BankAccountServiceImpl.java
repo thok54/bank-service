@@ -30,6 +30,11 @@ public class BankAccountServiceImpl implements BankAccountService {
     }
 
     @Override
+    public ResponseEntity<Account[]> search(String regex) {
+        return accountRestTemplate.getForEntity(basePath + "/search?regex=" + regex, Account[].class);
+    }
+
+    @Override
     public void store(Account acc) {
         accountRestTemplate.postForEntity(basePath, acc, Account.class);
     }

@@ -39,7 +39,7 @@ public class BankAccountController {
 
     @GetMapping("/search")
     public List<Account> searchByName(@RequestParam String regex) {
-        ResponseEntity<Account[]> response = bankAccountService.findAllByName(regex);
+        ResponseEntity<Account[]> response = bankAccountService.search(regex);
         return Arrays.asList(response.getBody());
     }
 
