@@ -13,6 +13,8 @@ public interface BankAccountService {
 
     ResponseEntity<Account[]> findAllByName(String name);
 
+    ResponseEntity<Account[]> search(String regex);
+
     void store(Account acc);
 
     void update(int id, Account acc);

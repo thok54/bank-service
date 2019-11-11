@@ -3,7 +3,6 @@ package com.banking.bankservice.web;
 import com.banking.bankservice.dto.Bank;
 import com.banking.bankservice.service.BankService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
